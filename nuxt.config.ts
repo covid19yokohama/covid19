@@ -87,8 +87,8 @@ const config: Configuration = {
   buildModules: [
     '@nuxtjs/stylelint-module',
     '@nuxtjs/vuetify',
-    '@nuxt/typescript-build',
-    '@nuxtjs/google-analytics'
+    '@nuxt/typescript-build'
+    // '@nuxtjs/google-analytics'
   ],
   /*
    ** Nuxt.js modules
@@ -113,9 +113,9 @@ const config: Configuration = {
       icons: false
     }
   },
-  googleAnalytics: {
-    id: process.env.GOOGLE_ANALYTICS_ID // .env.production などに設定してください。
-  },
+  // googleAnalytics: {
+  //   id: process.env.GOOGLE_ANALYTICS_ID // .env.production などに設定してください。
+  // },
   optionalCookies: [
     {
       name: 'i18n_redirected',
