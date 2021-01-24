@@ -15,7 +15,7 @@ date_default_timezone_set('Asia/Tokyo');
 
 const LASTUPDATE_JSON       = 'data.json';
 const KU_BAR_JSON           = 'ku-bar.json';
-const KU_MAP_JSON           = 'map.json';
+const KU_MAP_JSON           = 'map2.json';
 const KU_STACK_JSON         = 'ku-stack.json';
 const KU_PER_100K_JSON      = 'ku-per-100k.json';
 const PCR_TOTAL_JSON        = 'pcr-total.json';
@@ -983,11 +983,8 @@ function update_ku_map_json()
     $OnlyKuDiv100k = ku_num_divide_100k( $OnlyKu );
 
     # date update for data.json->patients
-    $DataJson['patients']['date'] = $Ku['ymd'];
-    $DataJson['patients']['data'] = [];
-    foreach( $OnlyKuDiv100k as $k => $v )
-        for($i=1;$i<=$v;$i++)
-            $DataJson['patients']['data'][] = array('居住地' => $k);
+    $DataJson['date'] = $Ku['ymd'];
+    $DataJson['data'] = $OnlyKuDiv100k;
 
     # write to json file
     arr2writeJson($DataJson, KU_MAP_JSON);

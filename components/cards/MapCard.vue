@@ -3,7 +3,7 @@
     <data-view
       :title="$t('区別 10万人あたりの陽性者人数マップ')"
       :title-id="'yokohama-city-map-table'"
-      :date="Data.patients.date"
+      :date="Data2.date"
       :source-title="$t('横浜市内の陽性患者の発生状況データ')"
       :source-url="
         $t(
@@ -33,7 +33,7 @@
 </template>
 
 <script>
-import Data from '@/data/map.json'
+import Data2 from '@/data/map2.json'
 import YokohamaMap from '@/assets/yokohama-map.svg'
 import DataView from '@/components/DataView.vue'
 import CityData from '@/data/cities.json'
@@ -45,20 +45,12 @@ export default {
   },
   data() {
     const data = {
-      Data
+      Data2
     }
     return data
   },
   mounted() {
-    const patients = Data.patients.data
-
-    // 市町村の患者人数の連想配列
-    const cityPatientsNumber = {}
-    for (const key of patients) {
-      cityPatientsNumber[key.居住地] = patients.filter(function(x) {
-        return x.居住地 === key.居住地
-      }).length
-    }
+    const cityPatientsNumber = Data2.data
 
     CityData.forEach(element => {
       if (!cityPatientsNumber[element.city]) {
