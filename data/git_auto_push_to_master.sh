@@ -1,17 +1,18 @@
 #!/bin/bash
 
 # update json. if update make update.txt
-today=$(date "+%Y%m%d");
+today=$(date "+%Y-%m-%d %H:%M");
 echo "${today} php update...";
+
+echo 'git pull';
+git pull;
+echo '';
 
 php update.php
 
 # if update.txt exist
 if [[ -f ./update.txt ]]; then
 
-	echo 'git pull';
-	git pull;
-	echo '';
 
 	echo 'git add .';
 	git add .;
