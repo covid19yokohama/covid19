@@ -50,26 +50,26 @@ function update_lastupdate()
 
 function update_jsons_by_csv()
 {
-    // csvとjsonの最終更新日付を比較
-    $CumulativeTotal = jsonUrl2array(CUMULATIVE_TOTAL_JSON);
-    if( compare_with_csv_ymd( end($CumulativeTotal['labels']) ) ) //ログの日付の最終行
-        return;
+    // // csvとjsonの最終更新日付を比較
+    // $CumulativeTotal = jsonUrl2array(CUMULATIVE_TOTAL_JSON);
+    // if( compare_with_csv_ymd( end($CumulativeTotal['labels']) ) ) //ログの日付の最終行
+    //     return;
 
     # 累計
     update_cumulative_total_json();
 
-    # 日ごと
-    update_per_day_json();
+    // # 日ごと
+    // update_per_day_json();
 
-    # 7日移動平均
-    update_7days_ave_json();
+    // # 7日移動平均
+    // update_7days_ave_json();
 
-    # 年齢別の状況
-    update_status_age_json();
+    // # 年齢別の状況
+    // update_status_age_json();
 
-    make_tweet_txt_by_csv();
+    // make_tweet_txt_by_csv();
 
-    update_lastupdate();
+    // update_lastupdate();
 
 }
 
@@ -255,13 +255,6 @@ function update_cumulative_total_json()
 
     return;
 
-
-    // todo:
-    // # gitが実行されhtmlが更新されるまでのタイムラグ
-    // sleep(240);
-
-    // #
-    // tweet_positive();
 }
 
 
@@ -428,9 +421,7 @@ function csv_aggregate()
     }
 
     # json用に'data'を挿入
-    $CumulativeTotalJson = $CumulativeTotal;
-
-    foreach( $CumulativeTotalJson as $k_status_num => $PatientStatusSums)
+    foreach( $CumulativeTotal as $k_status_num => $PatientStatusSums)
         $CumulativeTotalJson[$k_status_num]['data'] = $PatientStatusSums;
 
 
