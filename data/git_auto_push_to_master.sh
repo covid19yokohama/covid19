@@ -6,7 +6,6 @@ echo "${today} php update...";
 
 echo 'git pull';
 git pull;
-echo '';
 
 php update.php
 
