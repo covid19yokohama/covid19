@@ -50,27 +50,28 @@ function update_lastupdate()
 
 function update_jsons_by_csv()
 {
-    // // csvとjsonの最終更新日付を比較
-    // $CumulativeTotal = jsonUrl2array(CUMULATIVE_TOTAL_JSON);
-    // if( compare_with_csv_ymd( end($CumulativeTotal['labels']) ) ) //ログの日付の最終行
-    //     return;
+    // csvとjsonの最終更新日付を比較
+    $CumulativeTotal = jsonUrl2array(CUMULATIVE_TOTAL_JSON);
+    if( compare_with_csv_ymd( end($CumulativeTotal['labels']) ) ) //ログの日付の最終行
+        return;
 
     # 累計
     update_cumulative_total_json();
 
-    // # 日ごと
-    // update_per_day_json();
+    # 日ごと
+    update_per_day_json();
 
-    // # 7日移動平均
-    // update_7days_ave_json();
+    # 7日移動平均
+    update_7days_ave_json();
 
-    // # 年齢別の状況
-    // update_status_age_json();
+    # 年齢別の状況
+    update_status_age_json();
 
-    // make_tweet_txt_by_csv();
+    make_tweet_txt_by_csv();
 
-    // update_lastupdate();
+    update_lastupdate();
 
+    exit;
 }
 
 
@@ -424,8 +425,6 @@ function csv_aggregate()
     foreach( $CumulativeTotal as $k_status_num => $PatientStatusSums)
         $CumulativeTotalJson[$k_status_num]['data'] = $PatientStatusSums;
 
-
-
     #
     # ７日移動平均用    
     #
@@ -663,8 +662,67 @@ function update_ku_jsons()
     # 区別 陽性患者 発生数　積み上げグラフ  
     update_ku_stack_json();
 
+
+    update_lastupdate();
+
+    make_tweet_txt_by_ku();
+
+    exit;
 }
 
+
+
+function make_tweet_txt_by_ku()
+{
+    $DataJson = jsonUrl2array(KU_STACK_JSON);
+
+
+    # 日付を作る
+    $end_key   = count(($DataJson['labels']))-1;
+
+    $start_ymd = $DataJson['labels'][$end_key-1];
+    $end_ymd   = $DataJson['labels'][$end_key];
+
+    $start_md  = date("n/j", strtotime($start_ymd."+1 day")); 
+    $end_md    = date("n/j", strtotime($end_ymd)); 
+
+
+    # 区別の増加人数を作る
+    foreach ($DataJson['datasets'] as $KuAllDays)
+    {
+        $Name       = $KuAllDays['label']; # ex: 戸塚区
+        $Ku[$Name]  = $KuAllDays['data'][$end_key] - $KuAllDays['data'][$end_key-1]; # ex: 120-100
+    }
+
+
+    # 名前を省略
+    unset($Ku['市外']); # tweet文字数もあり削除
+    $Ku = array_flip($Ku);
+    $Ku = str_replace('区', '', $Ku);
+
+    foreach ($Ku as &$Name) {
+
+        if( strpos($Name, '港') !== false) # みつかったら。港南区と港北区は区別
+            continue;
+
+        $Name = mb_substr($Name, 0, 1);
+
+    }
+    $Ku = array_flip($Ku);
+    arsort($Ku);
+
+
+    # 出力文字列作成
+    foreach ($Ku as $name => $num)
+        $ku_txt .= "{$name}:{$num}\n";
+
+
+    # tweet
+    $tweet_txt = "{$start_md}〜{$end_md}間の区別増加数更新
+{$ku_txt}https://covid19.yokohama";
+
+    file_put_contents(UPDATE_AWARE_FILE, $tweet_txt);
+}
 
 
 
@@ -831,7 +889,77 @@ function update_pcr_jsons()
     # weekly.jsonを更新
     #
     update_pcr_weekly_json();
+
+
+
+    update_lastupdate();
+
+    make_tweet_txt_by_pcr();
+
+    exit;
+
+
 }
+
+
+
+function make_tweet_txt_by_pcr()
+{
+    $DataJson = jsonUrl2array(PCR_WEEKLY_JSON);
+
+
+    # 日付を作る
+    $end_key   = count(($DataJson['labels']))-1;
+
+    list($start_ymd,$end_ymd) = explode('_', $DataJson['labels'][$end_key]);
+
+    $start_md  = date("n/j", strtotime($start_ymd)); 
+    $end_md    = date("n/j", strtotime($end_ymd)); 
+
+
+    # 検査数
+    $posi = $DataJson['datasets'][0]['data'][$end_key]; # 陽性
+    $nega = $DataJson['datasets'][1]['data'][$end_key]; # 陽性
+    $total= $posi + $nega;
+
+    $posi = number_format($posi);
+    $nega = number_format($nega);
+    $total = number_format($total);
+
+
+
+    # 先週との差分
+    $posi_1 = $DataJson['datasets'][0]['data'][$end_key] - $DataJson['datasets'][0]['data'][$end_key-1]; # 陽性
+    $nega_1 = $DataJson['datasets'][1]['data'][$end_key] - $DataJson['datasets'][1]['data'][$end_key-1]; # 陽性
+    $total_1= $posi_1 + $nega_1;
+
+    tweet_num_format($posi_1);
+    tweet_num_format($nega_1);
+    tweet_num_format($total_1);
+
+    # tweet
+    $tweet_txt = "{$start_md}〜{$end_md}間のPCR検査状況を更新しました：
+
+検査合計：{$total} (先週 {$total_1})
+　陽性：{$posi} ({$posi_1})
+　陰性：{$nega} ({$nega_1})
+https://covid19.yokohama";
+
+    file_put_contents(UPDATE_AWARE_FILE, $tweet_txt);
+
+}
+
+
+function tweet_num_format(&$num)
+{
+    if( $num >= 0)
+        $prefix = '+';
+    else
+        $prefix = '-';
+
+    $num = $prefix.number_format($num);
+}
+
 
 
 
