@@ -50,26 +50,26 @@ function update_lastupdate()
 
 function update_jsons_by_csv()
 {
-    // csvとjsonの最終更新日付を比較
-    $CumulativeTotal = jsonUrl2array(CUMULATIVE_TOTAL_JSON);
-    if( compare_with_csv_ymd( end($CumulativeTotal['labels']) ) ) //ログの日付の最終行
-        return;
+    // // csvとjsonの最終更新日付を比較
+    // $CumulativeTotal = jsonUrl2array(CUMULATIVE_TOTAL_JSON);
+    // if( compare_with_csv_ymd( end($CumulativeTotal['labels']) ) ) //ログの日付の最終行
+    //     return;
 
-    # 累計
-    update_cumulative_total_json();
+    // # 累計
+    // update_cumulative_total_json();
 
-    # 日ごと
-    update_per_day_json();
+    // # 日ごと
+    // update_per_day_json();
 
-    # 7日移動平均
-    update_7days_ave_json();
+    // # 7日移動平均
+    // update_7days_ave_json();
 
-    # 年齢別の状況
-    update_status_age_json();
+    // # 年齢別の状況
+    // update_status_age_json();
 
     make_tweet_txt_by_csv();
 
-    update_lastupdate();
+    // update_lastupdate();
 
     exit;
 }
@@ -106,13 +106,16 @@ function make_tweet_txt_by_csv()
 
     # 7日移動平均順位計算
     $SevenDaysPositives = $SevenDays['datasets'][0]['data'];
-    $seven_days_rank = make_rank( $SevenDaysPositives, $week_num, 1); // start 20-02-24 is monday --> "11/40位"
+    $seven_days_count   = count($SevenDaysPositives)-1;
+    arsort($SevenDaysPositives);
+    $seven_days_rank = calc_rank( $SevenDaysPositives, $seven_days_count); // start 20-02-24 is monday --> "11/40位"
 
 
     # 順位計算
     foreach( $PerDays['datasets'] as $k_num => $v_Statuses )
         foreach ($v_Statuses['data'] as $k => $v)
             $PerDaysSums[$k] += $v;
+
 
     $day_rank = make_rank( $PerDaysSums, $week_num, 2);
 
@@ -127,8 +130,12 @@ function make_tweet_txt_by_csv()
 ・先週{$week}：{$day_rank['before_week'][0]}人
 　先々週：{$day_rank['before_week'][1]}人
 
-・7日移動平均：{$seven_days_ave}人({$seven_days_rank['rank']})
+・7日移動平均：{$seven_days_ave}人({$seven_days_rank}位/{$seven_days_count}日)
 https://covid19.yokohama";
+
+
+print_r($tweet_txt); exit;
+
 
     file_put_contents(UPDATE_AWARE_FILE, $tweet_txt);
 
@@ -184,33 +191,15 @@ function make_rank( $Positives, $today_week_num, $counter_week_num )
 
     $ArsortedWeekPositives = $WeekPositives;
     arsort($ArsortedWeekPositives);
-    $count = 1;
-    foreach ($ArsortedWeekPositives as $k_num => $v_rank) {
-        
-        # 最初は1位
-        if($count == 1)
-        {
-            $rank = 1;
-            $count++;
 
-            if($k_num == $today_key)
-                break;
 
-            continue;
-        }
+    // print_r($ArsortedWeekPositives); exit;
 
-        # 2つ目以降
-        $prev_v_rank = $ArsortedWeekPositives[$k_num-1];
+    $rank = calc_rank( $ArsortedWeekPositives, $today_key );
 
-        # 同数だったらカウントアップしない
-        if ( $v_rank != $prev_v_rank) {
-            $rank++;
-        }
 
-        # keyが今日だったら順位確定
-        if($k_num == $today_key)
-            break;
-    }
+
+
     $weeks = count($ArsortedWeekPositives);
 
     // # ついでに先週・先々週の人数も・・・
@@ -229,6 +218,39 @@ function make_rank( $Positives, $today_week_num, $counter_week_num )
 }
 
 
+
+function calc_rank( $Arsorted, $today_key )
+{
+    $count = 1;
+    foreach ($Arsorted as $k_num => $v_rank)
+    {
+        
+        # 最初は1位
+        if($count == 1)
+        {
+            $rank = 1;
+            $count++;
+
+            if($k_num == $today_key)
+                return $rank;
+
+            continue;
+        }
+
+        # 2つ目以降
+        $prev_v_rank = $Arsorted[$k_num-1];
+
+        # 同数だったらカウントアップしない
+        if ( $v_rank != $prev_v_rank) {
+            $rank++;
+        }
+
+        # keyが今日だったら順位確定
+        if($k_num == $today_key)
+            return $rank;
+    }
+
+}
 
 
 
