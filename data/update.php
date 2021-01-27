@@ -50,26 +50,26 @@ function update_lastupdate()
 
 function update_jsons_by_csv()
 {
-    // // csvとjsonの最終更新日付を比較
-    // $CumulativeTotal = jsonUrl2array(CUMULATIVE_TOTAL_JSON);
-    // if( compare_with_csv_ymd( end($CumulativeTotal['labels']) ) ) //ログの日付の最終行
-    //     return;
+    // csvとjsonの最終更新日付を比較
+    $CumulativeTotal = jsonUrl2array(CUMULATIVE_TOTAL_JSON);
+    if( compare_with_csv_ymd( end($CumulativeTotal['labels']) ) ) //ログの日付の最終行
+        return;
 
-    // # 累計
-    // update_cumulative_total_json();
+    # 累計
+    update_cumulative_total_json();
 
-    // # 日ごと
-    // update_per_day_json();
+    # 日ごと
+    update_per_day_json();
 
-    // # 7日移動平均
-    // update_7days_ave_json();
+    # 7日移動平均
+    update_7days_ave_json();
 
-    // # 年齢別の状況
-    // update_status_age_json();
+    # 年齢別の状況
+    update_status_age_json();
 
     make_tweet_txt_by_csv();
 
-    // update_lastupdate();
+    update_lastupdate();
 
     exit;
 }
@@ -133,10 +133,6 @@ function make_tweet_txt_by_csv()
 ・7日移動平均：{$seven_days_ave}人({$seven_days_rank}位/{$seven_days_count}日)
 https://covid19.yokohama";
 
-
-print_r($tweet_txt); exit;
-
-
     file_put_contents(UPDATE_AWARE_FILE, $tweet_txt);
 
 // "
@@ -191,9 +187,6 @@ function make_rank( $Positives, $today_week_num, $counter_week_num )
 
     $ArsortedWeekPositives = $WeekPositives;
     arsort($ArsortedWeekPositives);
-
-
-    // print_r($ArsortedWeekPositives); exit;
 
     $rank = calc_rank( $ArsortedWeekPositives, $today_key );
 
@@ -1343,9 +1336,6 @@ function extract_positive_array()
         $TodayPositiveData[$val] = (int)$match2[1][$key];
 
     $TodayPositiveData['無症状から中等症'] = $TodayPositiveData['無症状'] + $TodayPositiveData['軽症'] + $TodayPositiveData['中等症'];
-
-
-    print_r($TodayPositiveData);exit;
 
     return $TodayPositiveData;
 }
