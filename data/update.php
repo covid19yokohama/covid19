@@ -970,7 +970,7 @@ function tweet_num_format(&$num)
     if( $num >= 0)
         $prefix = '+';
     else
-        $prefix = '-';
+        $prefix = '';
 
     $num = $prefix.number_format($num);
 }
