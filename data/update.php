@@ -1017,7 +1017,6 @@ function update_pcr_weekly_json()
     arr2writeJson($PcrWeekJson, PCR_WEEKLY_JSON);
 
     echo __FUNCTION__."\n";
-
 }
 
 
@@ -1033,8 +1032,9 @@ function update_pcr_total_json()
     $CumulativeJson     = jsonUrl2array(CUMULATIVE_TOTAL_JSON);
     $CulumitiveYmdNum   = array_flip($CumulativeJson['labels']);
     $culumitive_ymd_num = $CulumitiveYmdNum[$Pcr['ymd']];
+
     foreach( $CumulativeJson['datasets'] as $StatusNums)
-        $pcr_ymd_positives += $StatusNums[$culumitive_ymd_num];
+        $pcr_ymd_positives += $StatusNums['data'][$culumitive_ymd_num];
 
     # make json
     $PcrJson['date']     = $Pcr['ymd'];
@@ -1044,7 +1044,7 @@ function update_pcr_total_json()
 
     arr2writeJson($PcrJson, PCR_TOTAL_JSON);
 
-    echo __FUNCTION__."\n";        
+    echo __FUNCTION__."\n";
 }
 
 
