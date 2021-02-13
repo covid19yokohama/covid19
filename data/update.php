@@ -710,31 +710,30 @@ function make_tweet_txt_by_ku()
     }
 
 
+
     # 名前を省略
     unset($Ku['市外']); # tweet文字数もあり削除
-    $Ku = array_flip($Ku);
-    $Ku = str_replace('区', '', $Ku);
 
-    foreach ($Ku as &$Name) {
+    foreach ($Ku as $Name => $Num ) {
+    	$new_ku_name = str_replace('区', '', $Name); # tweet文字数節約
 
-        if( strpos($Name, '港') !== false) # みつかったら。港南区と港北区は区別
-            continue;
+        if( strpos($new_ku_name, '港') === false) # 港南区と港北区は区別するためそのまま
+	        $new_ku_name = mb_substr($new_ku_name, 0, 1); # ex 戸塚区 => 戸	
 
-        $Name = mb_substr($Name, 0, 1);
-
+	    $SortKu[$new_ku_name] = $Num;
     }
-    $Ku = array_flip($Ku);
-    arsort($Ku);
+    arsort($SortKu);
 
 
     # 出力文字列作成
-    foreach ($Ku as $name => $num)
+    foreach ($SortKu as $name => $num)
         $ku_txt .= "{$name}:{$num}\n";
 
 
     # tweet
     $tweet_txt = "{$start_md}〜{$end_md}間の区別増加数更新
 {$ku_txt}https://covid19.yokohama";
+
 
     file_put_contents(UPDATE_AWARE_FILE, $tweet_txt);
 }
@@ -937,6 +936,12 @@ function make_tweet_txt_by_pcr()
     $nega = $DataJson['datasets'][1]['data'][$end_key]; # 陽性
     $total= $posi + $nega;
 
+    # 陽性率
+    $positive_ratio = ( $posi / $total) * 100;
+    $positive_ratio = round($positive_ratio, 1).'%';
+
+
+    # format
     $posi = number_format($posi);
     $nega = number_format($nega);
     $total = number_format($total);
@@ -952,13 +957,19 @@ function make_tweet_txt_by_pcr()
     tweet_num_format($nega_1);
     tweet_num_format($total_1);
 
+
+
     # tweet
     $tweet_txt = "{$start_md}〜{$end_md}間のPCR検査状況を更新しました：
 
 検査合計：{$total} (先週 {$total_1})
 　陽性：{$posi} ({$posi_1})
 　陰性：{$nega} ({$nega_1})
+
+陽性率：{$positive_ratio}	
+
 https://covid19.yokohama";
+
 
     file_put_contents(UPDATE_AWARE_FILE, $tweet_txt);
 
