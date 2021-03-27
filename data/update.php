@@ -79,9 +79,9 @@ function update_jsons_by_csv()
 function make_tweet_txt_by_csv()
 {
     $PerDays = jsonUrl2array(PER_DAY_JSON);
-    
+
     # 日付、曜日
-    $end_ymd    = end($PerDays['labels']); 
+    $end_ymd    = end($PerDays['labels']);
     $ym         = date('n/j', strtotime($end_ymd));
 
     $Week       = ['日曜', '月曜', '火曜', '水曜', '木曜', '金曜', '土曜'];
@@ -120,7 +120,7 @@ function make_tweet_txt_by_csv()
     $day_rank = make_rank( $PerDaysSums, $week_num, 2);
 
     $tweet_txt = "・{$ym} 横浜市 陽性患者の発生状況
-　計：{$status_sum}人({$week} {$day_rank['rank']})  
+　計：{$status_sum}人({$week} {$day_rank['rank']})
 　　死：{$StatusNums[0]}
 　　重：{$StatusNums[1]}
 　　無〜中：{$StatusNums[2]}
@@ -177,7 +177,7 @@ function make_rank( $Positives, $today_week_num, $counter_week_num )
         $counter_week_num++ ;
 
         if( $counter_week_num == 7 )
-            $counter_week_num = 0;                
+            $counter_week_num = 0;
     }
 
     #
@@ -202,7 +202,7 @@ function make_rank( $Positives, $today_week_num, $counter_week_num )
 
     return array(
         'rank'          => "{$rank}位/{$weeks}週",
-        'before_week'   => 
+        'before_week'   =>
             [
                 $one_week_ago,
                 $two_week_ago
@@ -217,7 +217,7 @@ function calc_rank( $Arsorted, $today_key )
     $count = 1;
     foreach ($Arsorted as $k_num => $v_rank)
     {
-        
+
         # 最初は1位
         if($count == 1)
         {
@@ -282,7 +282,7 @@ function compare_with_csv_ymd( $ymd )
 {
     $ymd     = date('Y-m-d',strtotime($ymd));
     $csv_ymd = date('Y-m-d',fetch_csv_timestamp());
-        
+
     if( $csv_ymd == $ymd )
     {
         echo "same: $ymd update_jsons_by_csv\n";
@@ -379,8 +379,8 @@ function csv_aggregate()
     #
 
     $start_ymd = $Csv['公表日'][0];
-    $end_ymd   = end($Csv['公表日']); 
-    $AllDates  = make_serial_date( $start_ymd, $end_ymd ); 
+    $end_ymd   = end($Csv['公表日']);
+    $AllDates  = make_serial_date( $start_ymd, $end_ymd );
 
 
 
@@ -389,18 +389,18 @@ function csv_aggregate()
     #
 
     // 以下のフォーマットにする json向け
-    // 
+    //
     // Array
     // (
     //     [退院等] => Array
     //         (
     //             [0] => 1     // [0]は 2020-02-13, 1は2/23の人数
-    //             [2] => 1        
+    //             [2] => 1
 
     $FlippedAllDates = array_flip($AllDates);
     foreach( $PatientStatus as $k_num => $k_status )
     {
-        $ymd               = $Csv['公表日'][$k_num];  # 2021-01-17　退院 
+        $ymd               = $Csv['公表日'][$k_num];  # 2021-01-17　退院
         $datasets_line_num = $FlippedAllDates[$ymd]; # 2021-01-17 は 333
         $Datasets[$k_status][$datasets_line_num]++;  # 退院の333を++
     }
@@ -416,7 +416,7 @@ function csv_aggregate()
         $FilledDatasets[$k_status] = $PatientStatusSums;
     }
     ksort($FilledDatasets);
-    
+
 
 
     #
@@ -441,7 +441,7 @@ function csv_aggregate()
         $CumulativeTotalJson[$k_status_num]['data'] = $PatientStatusSums;
 
     #
-    # ７日移動平均用    
+    # ７日移動平均用
     #
 
     # 状態ごとの累計から、合計の累計に
@@ -449,7 +449,7 @@ function csv_aggregate()
     {
         $OneFilledDatasets[$k_num] =
               $FilledDatasets[0][$k_num] // 死亡
-            + $FilledDatasets[1][$k_num] // 重症 
+            + $FilledDatasets[1][$k_num] // 重症
             + $FilledDatasets[2][$k_num] //  :
             + $FilledDatasets[3][$k_num]
             + $FilledDatasets[4][$k_num];
@@ -514,7 +514,7 @@ function age_aggregate( $Csv )
 
     # 数値の無い年代番号を0にする
     foreach ($AgeDatasets as $key => $value)
-        $AgeDatasets[$key] = fill_array_key_val_zero($value, 13);  
+        $AgeDatasets[$key] = fill_array_key_val_zero($value, 13);
 
     // [12] = 90年代 は使われていない
     foreach ($AgeDatasets as $key => &$value)
@@ -561,7 +561,7 @@ function fetch_csv_timestamp()
         return $timestamp;
 
     # ヘッダーのタイムスタンプを入手
-    $timestamp = url2modified_timestamp('https://www.city.yokohama.lg.jp/city-info/koho-kocho/koho/topics/corona-data.files/141003_yokohama_covid19_patients.csv');
+    $timestamp = url2modified_timestamp('https://www.city.yokohama.lg.jp/kurashi/kenko-iryo/yobosesshu/kansensho/coronavirus/corona-data.files/141003_yokohama_covid19_patients.csv');
 
     return $timestamp;
 }
@@ -674,7 +674,7 @@ function update_ku_jsons()
     # 区別 陽性者数の推移
     update_ku_bar_json();
 
-    # 区別 陽性患者 発生数　積み上げグラフ  
+    # 区別 陽性患者 発生数　積み上げグラフ
     update_ku_stack_json();
 
 
@@ -698,8 +698,8 @@ function make_tweet_txt_by_ku()
     $start_ymd = $DataJson['labels'][$end_key-1];
     $end_ymd   = $DataJson['labels'][$end_key];
 
-    $start_md  = date("n/j", strtotime($start_ymd."+1 day")); 
-    $end_md    = date("n/j", strtotime($end_ymd)); 
+    $start_md  = date("n/j", strtotime($start_ymd."+1 day"));
+    $end_md    = date("n/j", strtotime($end_ymd));
 
 
     # 区別の増加人数を作る
@@ -718,7 +718,7 @@ function make_tweet_txt_by_ku()
     	$new_ku_name = str_replace('区', '', $Name); # tweet文字数節約
 
         if( strpos($new_ku_name, '港') === false) # 港南区と港北区は区別するためそのまま
-	        $new_ku_name = mb_substr($new_ku_name, 0, 1); # ex 戸塚区 => 戸	
+	        $new_ku_name = mb_substr($new_ku_name, 0, 1); # ex 戸塚区 => 戸
 
 	    $SortKu[$new_ku_name] = $Num;
     }
@@ -927,8 +927,8 @@ function make_tweet_txt_by_pcr()
 
     list($start_ymd,$end_ymd) = explode('_', $DataJson['labels'][$end_key]);
 
-    $start_md  = date("n/j", strtotime($start_ymd)); 
-    $end_md    = date("n/j", strtotime($end_ymd)); 
+    $start_md  = date("n/j", strtotime($start_ymd));
+    $end_md    = date("n/j", strtotime($end_ymd));
 
 
     # 検査数
@@ -966,7 +966,7 @@ function make_tweet_txt_by_pcr()
 　陽性：{$posi} ({$posi_1})
 　陰性：{$nega} ({$nega_1})
 
-陽性率：{$positive_ratio}	
+陽性率：{$positive_ratio}
 
 https://covid19.yokohama";
 
@@ -1005,7 +1005,7 @@ function update_pcr_weekly_json()
             break;
 
         # labels
-        $start_ymd = date("Y-m-d", strtotime($v_ym."+1 day")); 
+        $start_ymd = date("Y-m-d", strtotime($v_ym."+1 day"));
         $next_ymd  = $PcrTotalJson['labels'][$k_num+1];
         $Labels[]  = $start_ymd.'_'.$next_ymd;
 
@@ -1068,7 +1068,7 @@ function fetch_Pcr()
     $html = fetch_yokohama_corona_html();
 
     # PCR検査数の更新日付を抽出. ex. $match_ym[1]=1, $match_ym[2]=10
-    preg_match("|ＰＣＲ検査数（([0-9]+)月([0-9]+)日時点）|us",$html,$match_ym); 
+    preg_match("|ＰＣＲ検査数（([0-9]+)月([0-9]+)日時点）|us",$html,$match_ym);
     $ymd = md2yyyymmdd($match_ym[1],$match_ym[2]);
 
     # date update for json
@@ -1181,7 +1181,7 @@ function fetch_positive_csv()
         return $csv_data;
 
     # csv to arr
-    $csv = file('https://www.city.yokohama.lg.jp/city-info/koho-kocho/koho/topics/corona-data.files/141003_yokohama_covid19_patients.csv');
+    $csv = file('https://www.city.yokohama.lg.jp/kurashi/kenko-iryo/yobosesshu/kansensho/coronavirus/corona-data.files/141003_yokohama_covid19_patients.csv');
     $Csv = array_map('str_getcsv', $csv);
 
     # array[0]の配列を添字にしてarray[1]以降を格納
@@ -1228,7 +1228,7 @@ function change_array_format( $Csv )
         foreach( $v_Cont as $k_cont_num => $v_cont )
         {
             $label            = $Csv[0][$k_cont_num]; // ex: No, 全国地方自治体コード...
-            $NewCsv[$label][] = $v_cont;  
+            $NewCsv[$label][] = $v_cont;
         }
     }
 
@@ -1283,7 +1283,7 @@ function update_ku_stack_json()
 
 
 #
-#  csvは無いのでスクレイピング   
+#  csvは無いのでスクレイピング
 #
 
 function fetch_ku()
@@ -1395,4 +1395,3 @@ function arr2writeJson($arr,$json_url)
     $json = json_encode($arr, JSON_UNESCAPED_UNICODE|JSON_PRETTY_PRINT);
     file_put_contents($json_url, $json);
 }
-
