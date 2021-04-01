@@ -42,7 +42,7 @@ exit;
 function update_lastupdate()
 {
     $DataJson = jsonUrl2array(LASTUPDATE_JSON);
-    $DataJson['lastUpdate'] = date("Y-m-d H:i");
+    $DataJson['lastUpdate'] = date('Y-m-d H:i',fetch_csv_timestamp());
     arr2writeJson($DataJson, LASTUPDATE_JSON);
 }
 
@@ -50,10 +50,19 @@ function update_lastupdate()
 
 function update_jsons_by_csv()
 {
-    // csvとjsonの最終更新日付を比較
-    $CumulativeTotal = jsonUrl2array(CUMULATIVE_TOTAL_JSON);
-    if( compare_with_csv_ymd( end($CumulativeTotal['labels']) ) ) //ログの日付の最終行
+    // csvとlast update csvの最終更新日付を比較
+    $DataJson = jsonUrl2array(LASTUPDATE_JSON);
+
+    $log_csv_ymdhi = $DataJson['lastUpdate'];
+    $now_csv_ymdhi = date('Y-m-d H:i',fetch_csv_timestamp());
+
+    if( $now_csv_ymdhi == $log_csv_ymdhi )
+    {
+        echo "same: {$now_csv_ymdhi} ".__FUNCTION__."\n";
         return;
+    }else {
+        echo "Not same: {$now_csv_ymdhi} == {$log_csv_ymdhi}";
+    }
 
     # 累計
     update_cumulative_total_json();
@@ -289,7 +298,7 @@ function compare_with_csv_ymd( $ymd )
         return TRUE;
     }
 
-    echo "Not same: csv $csv_ymd == json $ymd  ...  \n";
+    echo "Not same: now csv $csv_ymd == last csv $ymd  ...  \n";
     return FALSE;
 }
 
@@ -677,9 +686,6 @@ function update_ku_jsons()
     # 区別 陽性患者 発生数　積み上げグラフ
     update_ku_stack_json();
 
-
-    update_lastupdate();
-
     make_tweet_txt_by_ku();
 
     exit;
@@ -892,21 +898,15 @@ function update_pcr_jsons()
         return;
     }
 
-
     #
     # total.jsonを更新：累計データからPCR更新日の陽性人数を取得する
     #
     update_pcr_total_json();
 
-
     #
     # weekly.jsonを更新
     #
     update_pcr_weekly_json();
-
-
-
-    update_lastupdate();
 
     make_tweet_txt_by_pcr();
 
