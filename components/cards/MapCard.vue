@@ -15,14 +15,14 @@
         <table class="regend-table">
           <tbody>
             <tr>
-              <td><span class="color-test infected-level1" />0-100</td>
-              <td><span class="color-test infected-level2" />100-200</td>
-              <td><span class="color-test infected-level3" />200-300</td>
+              <td><span class="color-test infected-level1" />0-200</td>
+              <td><span class="color-test infected-level2" />200-400</td>
+              <td><span class="color-test infected-level3" />400-600</td>
             </tr>
             <tr>
-              <td><span class="color-test infected-level4" />300-400</td>
-              <td><span class="color-test infected-level5" />400-500</td>
-              <td><span class="color-test infected-level6" />500-</td>
+              <td><span class="color-test infected-level4" />600-800</td>
+              <td><span class="color-test infected-level5" />800-1000</td>
+              <td><span class="color-test infected-level6" />1000-</td>
             </tr>
           </tbody>
         </table>
@@ -59,15 +59,15 @@ export default {
       const targetElement = document.getElementById(
         'yokohama-map_svg__' + element.Romaji
       )
-      if (cityPatientsNumber[element.city] <= 100)
+      if (cityPatientsNumber[element.city] <= 200)
         targetElement.classList.add('infected-level1')
-      else if (cityPatientsNumber[element.city] <= 200)
-        targetElement.classList.add('infected-level2')
-      else if (cityPatientsNumber[element.city] <= 300)
-        targetElement.classList.add('infected-level3')
       else if (cityPatientsNumber[element.city] <= 400)
+        targetElement.classList.add('infected-level2')
+      else if (cityPatientsNumber[element.city] <= 600)
+        targetElement.classList.add('infected-level3')
+      else if (cityPatientsNumber[element.city] <= 800)
         targetElement.classList.add('infected-level4')
-      else if (cityPatientsNumber[element.city] <= 500)
+      else if (cityPatientsNumber[element.city] <= 1000)
         targetElement.classList.add('infected-level5')
       else targetElement.classList.add('infected-level6')
     })

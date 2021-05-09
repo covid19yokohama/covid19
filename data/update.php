@@ -960,7 +960,7 @@ function make_tweet_txt_by_pcr()
 
 
     # tweet
-    $tweet_txt = "{$start_md}〜{$end_md}間のPCR検査状況を更新しました：
+    $tweet_txt = "{$start_md}〜{$end_md}間のPCR検査状況を更新
 
 検査合計：{$total} (先週 {$total_1})
 　陽性：{$posi} ({$posi_1})
@@ -968,7 +968,8 @@ function make_tweet_txt_by_pcr()
 
 陽性率：{$positive_ratio}
 
-https://covid19.yokohama";
+上記は速報値です、以下から最新情報を確認ください
+https://www.city.yokohama.lg.jp/kurashi/kenko-iryo/yobosesshu/kansensho/coronavirus/corona-data.files/pcr.pdf";
 
 
     file_put_contents(UPDATE_AWARE_FILE, $tweet_txt);
