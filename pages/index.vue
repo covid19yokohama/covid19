@@ -19,29 +19,29 @@
       :text="$t('横浜市発表の新型コロナウイルス感染症に関する最新情報はこちら')"
     />
     <card-row class="DataBlock">
-      <!-- 陽性患者状況(7日移動平均) -->
-      <seven-days-ave-card />
-
-      <!-- 区別マップ表示 -->
-      <map-card />
-
-      <!-- 区別の検査陽性者 -->
-      <ku-bar-card />
-
-      <!-- 区別の検査陽性者 -->
-      <ku-per100k-card />
-
-      <!-- 区別の陽性者数積み上げ -->
-      <ku-stack-card />
-
       <!-- 陽性患者状況(累計) -->
       <cumulative-total-card />
 
       <!-- 陽性患者状況(日ごと) -->
       <total-per-day-card />
 
+      <!-- 陽性患者状況(7日移動平均) -->
+      <seven-days-ave-card />
+
       <!-- 年齢 -->
       <status-age-card />
+
+      <!-- 区別マップ表示 -->
+      <map-card />
+
+      <!-- 区別の陽性者数積み上げ -->
+      <ku-stack-card />
+
+      <!-- 区別の検査陽性者 -->
+      <ku-bar-card />
+
+      <!-- 区別の検査陽性者 -->
+      <ku-per100k-card />
 
       <!-- PCR検査数 -->
       <pcr-total-card />

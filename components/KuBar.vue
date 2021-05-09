@@ -60,7 +60,7 @@ import { ChartOptions } from 'chart.js'
 import { ThisTypedComponentOptionsWithRecordProps } from 'vue/types/options'
 import Data from '@/data/ku-bar.json'
 import DataView from '@/components/DataView.vue'
-// import { getGraphSeriesStyle } from '@/utils/colors'
+import { getGraphSeriesStyle } from '@/utils/colors'
 
 interface HTMLElementEvent<T extends HTMLElement> extends MouseEvent {
   currentTarget: T
@@ -147,15 +147,15 @@ const options: ThisTypedComponentOptionsWithRecordProps<
   },
   computed: {
     displayData() {
-      // const graphSeries = getGraphSeriesStyle(this.chartData.datasets.length)
+      const graphSeries = getGraphSeriesStyle(this.chartData.datasets.length)
       return {
         labels: this.chartData.labels as string[],
         datasets: this.chartData.datasets.map((item, index) => {
           return {
             label: this.cities[index] as string,
             data: item.data,
-            backgroundColor: '#906BA3',
-            borderColor: '#906BA3',
+            backgroundColor: graphSeries[index].fillColor,
+            borderColor: graphSeries[index].strokeColor,
             borderWidth: 1
           }
         })

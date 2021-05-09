@@ -54,8 +54,8 @@ import { ChartOptions } from 'chart.js'
 import { ThisTypedComponentOptionsWithRecordProps } from 'vue/types/options'
 import agencyData from '@/data/seven-days.json'
 import DataView from '@/components/DataView.vue'
+import { getGraphSeriesStyle } from '@/utils/colors'
 import { DisplayData, DataSets } from '@/plugins/vue-chart'
-// import { getGraphSeriesStyle } from '@/utils/colors'
 
 interface AgencyDataSets extends DataSets {
   label: string
@@ -137,15 +137,15 @@ const options: ThisTypedComponentOptionsWithRecordProps<
   },
   computed: {
     displayData() {
-      // const graphSeries = getGraphSeriesStyle(this.chartData.datasets.length)
+      const graphSeries = getGraphSeriesStyle(this.chartData.datasets.length)
       return {
         labels: this.chartData.labels as string[],
         datasets: this.chartData.datasets.map((item, index) => {
           return {
             label: this.agencies[index] as string,
             data: item.data,
-            backgroundColor: '#444444',
-            borderColor: '#444444',
+            backgroundColor: graphSeries[index].fillColor,
+            borderColor: graphSeries[index].strokeColor,
             borderWidth: 1
           }
         })
