@@ -127,7 +127,7 @@ const options: ThisTypedComponentOptionsWithRecordProps<
     }
   },
   data() {
-    const agencies = [this.$t('陰性'), this.$t('陽性')]
+    const agencies = [this.$t('陽性'), this.$t('陰性')]
 
     return {
       canvas: true,
