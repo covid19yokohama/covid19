@@ -19,51 +19,35 @@
       :text="$t('横浜市発表の新型コロナウイルス感染症に関する最新情報はこちら')"
     />
     <card-row class="DataBlock">
-      <!-- 陽性患者状況(累計) -->
-      <agency-card2 />
-
-      <!-- 陽性患者状況(日ごと) -->
-      <agency-card5 />
-
-      <!-- 年齢 -->
-      <agency-card3 />
+      <!-- 陽性患者状況(7日移動平均) -->
+      <seven-days-ave-card />
 
       <!-- 区別マップ表示 -->
-      <ibaraki-graphical-map-card />
+      <map-card />
 
       <!-- 区別の検査陽性者 -->
-      <cities-card />
+      <ku-bar-card />
 
       <!-- 区別の検査陽性者 -->
-      <cities-card2 />
+      <ku-per100k-card />
+
+      <!-- 区別の陽性者数積み上げ -->
+      <ku-stack-card />
+
+      <!-- 陽性患者状況(累計) -->
+      <cumulative-total-card />
+
+      <!-- 陽性患者状況(日ごと) -->
+      <total-per-day-card />
+
+      <!-- 年齢 -->
+      <status-age-card />
 
       <!-- PCR検査数 -->
-      <agency-card4 />
+      <pcr-total-card />
 
-      <!-- 都庁来庁者数の推移 -->
-      <agency-card />
-
-      <!-- 検査陽性者の状況 -->
-      <!--       <confirmed-cases-details-card /> -->
-      <!--       <confirmed-cases-details-card /> -->
-      <!-- 陽性患者数 -->
-      <!--       <confirmed-cases-number-card /> -->
-      <!-- 陽性患者の属性 -->
-      <!--       <confirmed-cases-attributes-card /> -->
-      <!-- 区市町村別患者数 -->
-      <!--       <confirmed-cases-by-municipalities-card /> -->
-      <!-- 検査実施状況 -->
-      <!--       <tested-cases-details-card /> -->
-      <!-- 検査実施人数 -->
-      <!--       <inspection-persons-number-card /> -->
-      <!-- 検査実施件数 -->
-      <!--       <tested-number-card /> -->
-      <!-- 新型コロナコールセンター相談件数 -->
-      <!--       <telephone-advisory-reports-number-card /> -->
-      <!-- 新型コロナ受診相談窓口相談件数 -->
-      <!--       <consultation-desk-reports-number-card /> -->
-      <!-- 都営地下鉄の利用者数の推移 -->
-      <!--       <metro-card /> -->
+      <!-- PCR検査数 -->
+      <pcr-weerly-card />
     </card-row>
     <v-divider />
   </div>
@@ -78,53 +62,33 @@ import PageHeader from '@/components/PageHeader.vue'
 import StaticInfo from '@/components/StaticInfo.vue'
 
 import CardRow from '@/components/cards/CardRow.vue'
-import CitiesCard from '@/components/cards/CitiesCard.vue'
-import CitiesCard2 from '@/components/cards/CitiesCard2.vue'
-import IbarakiGraphicalMapCard from '@/components/cards/IbarakiGraphicalMapCard.vue'
-// import ConfirmedCasesDetailsCard from '@/components/cards/ConfirmedCasesDetailsCard.vue'
-
-// import AgeCard from '@/components/cards/AgeCard.vue'
-// import ConfirmedCasesNumberCard from '@/components/cards/ConfirmedCasesNumberCard.vue'
-// import ConfirmedCasesAttributesCard from '@/components/cards/ConfirmedCasesAttributesCard.vue'
-// import ConfirmedCasesByMunicipalitiesCard from '@/components/cards/ConfirmedCasesByMunicipalitiesCard.vue'
-// import TestedCasesDetailsCard from '@/components/cards/TestedCasesDetailsCard.vue'
-// import InspectionPersonsNumberCard from '@/components/cards/InspectionPersonsNumberCard.vue'
-// import TestedNumberCard from '@/components/cards/TestedNumberCard.vue'
-// import TelephoneAdvisoryReportsNumberCard from '@/components/cards/TelephoneAdvisoryReportsNumberCard.vue'
-// import ConsultationDeskReportsNumberCard from '@/components/cards/ConsultationDeskReportsNumberCard.vue'
-// import MetroCard from '@/components/cards/MetroCard.vue'
-import AgencyCard from '@/components/cards/AgencyCard.vue'
-import AgencyCard2 from '@/components/cards/AgencyCard2.vue'
-import AgencyCard3 from '@/components/cards/AgencyCard3.vue'
-import AgencyCard4 from '@/components/cards/AgencyCard4.vue'
-import AgencyCard5 from '@/components/cards/AgencyCard5.vue'
+import MapCard from '@/components/cards/MapCard.vue'
+import KuBarCard from '@/components/cards/KuBarCard.vue'
+import PcrTotalCard from '@/components/cards/PcrTotalCard.vue'
+import KuStackCard from '@/components/cards/KuStackCard.vue'
+import PcrWeerlyCard from '@/components/cards/PcrWeerlyCard.vue'
+import StatusAgeCard from '@/components/cards/StatusAgeCard.vue'
+import KuPer100kCard from '@/components/cards/KuPer100kCard.vue'
+import TotalPerDayCard from '@/components/cards/TotalPerDayCard.vue'
+import SevenDaysAveCard from '@/components/cards/SevenDaysAveCard.vue'
+import CumulativeTotalCard from '@/components/cards/CumulativeTotalCard.vue'
 import { convertDatetimeToISO8601Format } from '@/utils/formatDate'
 
 export default Vue.extend({
   components: {
+    CardRow,
+    MapCard,
     PageHeader,
     StaticInfo,
-    CardRow,
-    CitiesCard,
-    CitiesCard2,
-    IbarakiGraphicalMapCard,
-    //     ConfirmedCasesDetailsCard,
-    //     AgeCard,
-    //     WhatsNew,
-    //     ConfirmedCasesNumberCard,
-    //     ConfirmedCasesAttributesCard,
-    //     ConfirmedCasesByMunicipalitiesCard,
-    //     TestedCasesDetailsCard,
-    //     InspectionPersonsNumberCard,
-    //     TestedNumberCard,
-    //     TelephoneAdvisoryReportsNumberCard,
-    //     ConsultationDeskReportsNumberCard,
-    //     MetroCard,
-    AgencyCard2,
-    AgencyCard3,
-    AgencyCard4,
-    AgencyCard5,
-    AgencyCard
+    KuBarCard,
+    KuStackCard,
+    PcrTotalCard,
+    PcrWeerlyCard,
+    KuPer100kCard,
+    StatusAgeCard,
+    TotalPerDayCard,
+    SevenDaysAveCard,
+    CumulativeTotalCard
   },
   data() {
     const data = {

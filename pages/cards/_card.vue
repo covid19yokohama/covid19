@@ -4,92 +4,28 @@
       v-if="this.$route.params.card == 'ConfirmedCasesDetailsCard'"
     />
 
-    <cities-card v-else-if="this.$route.params.card == 'Cities'" />
+    <ku-bar-card v-else-if="this.$route.params.card == 'Cities'" />
 
-    <ibaraki-graphical-map-card
-      v-else-if="this.$route.params.card == 'IbarakiGraphicalMapCard'"
-    />
+    <map-card v-else-if="this.$route.params.card == 'MapCard'" />
 
-    <!--     <tested-cases-details-card
-      v-else-if="this.$route.params.card == 'details-of-tested-cases'"
-    />
-    <confirmed-cases-number-card
-      v-else-if="this.$route.params.card == 'number-of-confirmed-cases'"
-    />
-    <confirmed-cases-by-municipalities-card
-      v-else-if="
-        this.$route.params.card == 'number-of-confirmed-cases-by-municipalities'
-      "
-    />
-    <confirmed-cases-attributes-card
-      v-else-if="this.$route.params.card == 'attributes-of-confirmed-cases'"
-    />
-    <tested-number-card
-      v-else-if="this.$route.params.card == 'number-of-tested'"
-    />
-    <inspection-persons-number-card
-      v-else-if="this.$route.params.card == 'number-of-inspection-persons'"
-    />
-    <telephone-advisory-reports-number-card
-      v-else-if="
-        this.$route.params.card ==
-          'number-of-reports-to-covid19-telephone-advisory-center'
-      "
-    />
-    <consultation-desk-reports-number-card
-      v-else-if="
-        this.$route.params.card ==
-          'number-of-reports-to-covid19-consultation-desk'
-      "
-    />
-    <metro-card
-      v-else-if="
-        this.$route.params.card == 'predicted-number-of-toei-subway-passengers'
-      "
-    />
- -->
-    <agency-card v-else-if="this.$route.params.card == 'agency'" />
+    <ku-stack-card v-else-if="this.$route.params.card == 'agency'" />
   </div>
 </template>
 
 <script>
 import Data from '@/data/data.json'
-import agencyData from '@/data/agency.json'
-// import MetroData from '@/data/metro.json'
-// import patientData from '@/data/patient.json'
-
-import CitiesCard from '@/components/cards/CitiesCard.vue'
-import IbarakiGraphicalMapCard from '@/components/cards/IbarakiGraphicalMapCard.vue'
+import agencyData from '@/data/ku-stack.json'
+import KuBarCard from '@/components/cards/KuBarCard.vue'
+import MapCard from '@/components/cards/MapCard.vue'
+import KuStackCard from '@/components/cards/KuStackCard.vue'
 import ConfirmedCasesDetailsCard from '@/components/cards/ConfirmedCasesDetailsCard.vue'
-
-// import ConfirmedCasesDetailsCard from '@/components/cards/ConfirmedCasesDetailsCard.vue'
-// import TestedCasesDetailsCard from '@/components/cards/TestedCasesDetailsCard.vue'
-// import ConfirmedCasesNumberCard from '@/components/cards/ConfirmedCasesNumberCard.vue'
-// import ConfirmedCasesAttributesCard from '@/components/cards/ConfirmedCasesAttributesCard.vue'
-// import ConfirmedCasesByMunicipalitiesCard from '@/components/cards/ConfirmedCasesByMunicipalitiesCard.vue'
-// import TestedNumberCard from '@/components/cards/TestedNumberCard.vue'
-// import InspectionPersonsNumberCard from '@/components/cards/InspectionPersonsNumberCard.vue'
-// import TelephoneAdvisoryReportsNumberCard from '@/components/cards/TelephoneAdvisoryReportsNumberCard.vue'
-// import ConsultationDeskReportsNumberCard from '@/components/cards/ConsultationDeskReportsNumberCard.vue'
-// import MetroCard from '@/components/cards/MetroCard.vue'
-import AgencyCard from '@/components/cards/AgencyCard.vue'
 
 export default {
   components: {
-    CitiesCard,
-    IbarakiGraphicalMapCard,
+    KuBarCard,
+    MapCard,
     ConfirmedCasesDetailsCard,
-    //     ConfirmedCasesDetailsCard,
-    //     TestedCasesDetailsCard,
-    //     ConfirmedCasesNumberCard,
-    //     ConfirmedCasesAttributesCard,
-    //     ConfirmedCasesByMunicipalitiesCard,
-    //     TestedNumberCard,
-    //     InspectionPersonsNumberCard,
-    //     TelephoneAdvisoryReportsNumberCard,
-    //     ConsultationDeskReportsNumberCard,
-    //     MetroCard,
-    AgencyCard
+    KuStackCard
   },
   data() {
     let title, updatedAt
@@ -98,7 +34,7 @@ export default {
         title = this.$t('区別 陽性者人数')
         updatedAt = Data.cities.date
         break
-      case 'IbarakiGraphicalMap':
+      case 'Map':
         title = this.$t('区別 陽性者人数マップ')
         updatedAt = Data.patients.date
         break

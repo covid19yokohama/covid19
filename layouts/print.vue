@@ -100,8 +100,6 @@ export default Vue.extend({
 
 <style lang="scss" scoped>
 * {
-  // Chromeでbackgroundを印刷する設定
-  // FirefoxはCSSでの設定では無理そうなので、いったん諦めました
   -webkit-print-color-adjust: exact;
 }
 
