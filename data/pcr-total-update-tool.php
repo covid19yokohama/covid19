@@ -1,9 +1,9 @@
 <?php
 
 
-const LATEST_PCR_TOTAL  = 435315;
-const LATEST_PCR_YMD    = '2021-05-09';
-const LATEST_POSI_SUM   = 24250;
+const LATEST_PCR_TOTAL  = 525044;
+const LATEST_PCR_YMD    = '2021-07-11';
+const LATEST_POSI_SUM   = 30172;
 
 const PCR_TOTAL_RATIO   = 'pcr-total_ratio.txt';
 const PCR_TOTAL_JSON    = 'pcr-total.json';
