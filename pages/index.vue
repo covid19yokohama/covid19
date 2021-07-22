@@ -19,6 +19,9 @@
       :text="$t('横浜市発表の新型コロナウイルス感染症に関する最新情報はこちら')"
     />
     <card-row class="DataBlock">
+      <!-- ワクチン接種状況 -->
+      <vaccination-total-card />
+
       <!-- 陽性患者状況(7日移動平均) -->
       <seven-days-ave-card />
 
@@ -64,14 +67,15 @@ import StaticInfo from '@/components/StaticInfo.vue'
 import CardRow from '@/components/cards/CardRow.vue'
 import MapCard from '@/components/cards/MapCard.vue'
 import KuBarCard from '@/components/cards/KuBarCard.vue'
-import PcrTotalCard from '@/components/cards/PcrTotalCard.vue'
 import KuStackCard from '@/components/cards/KuStackCard.vue'
+import PcrTotalCard from '@/components/cards/PcrTotalCard.vue'
 import PcrWeerlyCard from '@/components/cards/PcrWeerlyCard.vue'
 import StatusAgeCard from '@/components/cards/StatusAgeCard.vue'
 import KuPer100kCard from '@/components/cards/KuPer100kCard.vue'
 import TotalPerDayCard from '@/components/cards/TotalPerDayCard.vue'
 import SevenDaysAveCard from '@/components/cards/SevenDaysAveCard.vue'
 import CumulativeTotalCard from '@/components/cards/CumulativeTotalCard.vue'
+import VaccinationTotalCard from '@/components/cards/VaccinationTotalCard.vue'
 import { convertDatetimeToISO8601Format } from '@/utils/formatDate'
 
 export default Vue.extend({
@@ -88,7 +92,8 @@ export default Vue.extend({
     StatusAgeCard,
     TotalPerDayCard,
     SevenDaysAveCard,
-    CumulativeTotalCard
+    CumulativeTotalCard,
+    VaccinationTotalCard
   },
   data() {
     const data = {
